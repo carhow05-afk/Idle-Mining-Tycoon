@@ -29,10 +29,18 @@
 @keyframes spark-jump{0%,36%{opacity:0;transform:translate(0,0) scale(.6)}55%{opacity:1;transform:translate(-9px,-10px) scale(1.1)}100%{opacity:0;transform:translate(-23px,-28px) scale(.5)}}
 @keyframes ore-flash{from{opacity:.45}to{opacity:1}}@keyframes cloud-drift{to{transform:translateX(32px)}}@keyframes sun-glow{to{box-shadow:0 0 45px #fff5a4ff}}@keyframes truck-drive{0%,10%{transform:translateX(0)}65%,100%{transform:translateX(680px)}}@keyframes wheel-spin{to{rotate:360deg}}
 @media(prefers-reduced-motion:reduce){.ore-cart,.miner,.pick,.spark,.delivery-truck,.truck-wheel,.surface .cloud,.surface .sun{animation:none!important}.lift-cage{transition:none!important}}
+
+/* v3 large, dedicated animated operations scene, fully independent of the upgrade tiles */
+.live-scene{margin:0 12px 12px;border:2px solid #665137;border-radius:18px;overflow:hidden;background:#192535;box-shadow:0 10px 24px #0006}
+.live-heading{height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#1f3040;color:#fff1cf;font-size:12px;letter-spacing:.5px;font-weight:900}
+.live-indicator{color:#77edae;font-size:11px;letter-spacing:.3px}
+#liveMine{width:100%;height:auto;aspect-ratio:540 / 392;display:block;background:#28313a}
+.live-legend{display:flex;justify-content:space-around;gap:5px;flex-wrap:wrap;padding:9px 6px;background:#1a2534;color:#dce7f0;font-size:10px;font-weight:700}
+@media(max-width:370px){.live-legend{font-size:9px}}
 </style></head><body><div id="app">
 <header class="header"><div class="brand"><div class="brandlogo">⛏️</div><div><b>DEEP DIG</b><div class="tiny">Idle mining tycoon</div></div></div><button class="round" id="settingsBtn" aria-label="Settings">⚙️</button></header>
 <section class="summary"><div class="stat"><div class="tiny">Your cash</div><div class="n cash" id="money">$120</div></div><div class="stat"><div class="tiny">Profit per second</div><div class="n" id="profit">$0/s</div></div></section>
-<section id="mineTab" class="tab active"><div class="sectionhead"><h2>⛏️ Your mine</h2><span class="chip" id="mineStatus">● OPERATING</span></div><div class="mine"><div class="surface"><span class="sun"></span><span class="cloud">☁</span><div class="surface-road"></div><div class="delivery-truck" aria-hidden="true"><div class="truck-back"></div><div class="truck-cab"></div><div class="truck-wheel w1"></div><div class="truck-wheel w2"></div></div><div class="headframe"></div><div class="building"></div></div><div class="earth" id="earth"><div class="lift-track" aria-hidden="true"><div class="lift-cable"></div><div class="lift-cage lift-active" id="liftCage"></div></div><div id="shafts"></div></div><div class="mine-footer"><div>⛏️ Ore awaiting lift<b id="oreVal">0</b></div><div>🚚 Ore awaiting sale<b id="stockVal">0</b></div><div>💎 Value per ore<b id="orePrice">$1</b></div></div></div><button class="dig" id="digBtn">⛏️ TAP TO DIG <small id="digBonus">+5 ore per tap</small></button><div class="strip"><div><b style="font-size:13px">Upgrade quantity</b><div class="tiny" style="margin-top:3px">Applies to upgrades</div></div><div class="buyselector" id="buySelector"><button data-buy="1" class="active">×1</button><button data-buy="10">×10</button><button data-buy="max">MAX</button></div></div><div class="controls"><div class="machine"><div class="machine-title">🛗 Elevator <span id="elevLevel">Lv 1</span></div><div class="machine-sub" id="elevRate">Lifts 3 ore/s</div><div class="bar"><div id="elevBar"></div></div><button class="upgrade" id="elevBtn">Upgrade · $80</button></div><div class="machine"><div class="machine-title">🏭 Warehouse <span id="whLevel">Lv 1</span></div><div class="machine-sub" id="whRate">Sells 3 ore/s</div><div class="bar"><div id="whBar"></div></div><button class="upgrade" id="whBtn">Upgrade · $80</button></div></div><div class="sectionhead"><h2>📈 Next milestone</h2></div><div class="info"><div class="progress"><div class="progress-top"><span id="milestoneLabel">Earn $1,000 total</span><span id="milestoneValue">0%</span></div><div class="progress-track"><div class="progress-fill" id="milestoneFill"></div></div></div></div></section>
+<section id="mineTab" class="tab active"><div class="sectionhead"><h2>⛏️ Your mine</h2><span class="chip" id="mineStatus">● OPERATING</span></div><div class="live-scene"><div class="live-heading"><span>🎬 LIVE MINE OPERATIONS</span><span class="live-indicator">● MOVING</span></div><canvas id="liveMine" width="540" height="392" aria-label="Animated view with walking miners, hauling carts, a moving mine elevator and delivery trucks"></canvas><div class="live-legend">👷 Workers walking & digging <span>🛗 Lift moving</span> <span>🚚 Trucks delivering</span></div></div><div class="mine"><div class="surface"><span class="sun"></span><span class="cloud">☁</span><div class="surface-road"></div><div class="delivery-truck" aria-hidden="true"><div class="truck-back"></div><div class="truck-cab"></div><div class="truck-wheel w1"></div><div class="truck-wheel w2"></div></div><div class="headframe"></div><div class="building"></div></div><div class="earth" id="earth"><div class="lift-track" aria-hidden="true"><div class="lift-cable"></div><div class="lift-cage lift-active" id="liftCage"></div></div><div id="shafts"></div></div><div class="mine-footer"><div>⛏️ Ore awaiting lift<b id="oreVal">0</b></div><div>🚚 Ore awaiting sale<b id="stockVal">0</b></div><div>💎 Value per ore<b id="orePrice">$1</b></div></div></div><button class="dig" id="digBtn">⛏️ TAP TO DIG <small id="digBonus">+5 ore per tap</small></button><div class="strip"><div><b style="font-size:13px">Upgrade quantity</b><div class="tiny" style="margin-top:3px">Applies to upgrades</div></div><div class="buyselector" id="buySelector"><button data-buy="1" class="active">×1</button><button data-buy="10">×10</button><button data-buy="max">MAX</button></div></div><div class="controls"><div class="machine"><div class="machine-title">🛗 Elevator <span id="elevLevel">Lv 1</span></div><div class="machine-sub" id="elevRate">Lifts 3 ore/s</div><div class="bar"><div id="elevBar"></div></div><button class="upgrade" id="elevBtn">Upgrade · $80</button></div><div class="machine"><div class="machine-title">🏭 Warehouse <span id="whLevel">Lv 1</span></div><div class="machine-sub" id="whRate">Sells 3 ore/s</div><div class="bar"><div id="whBar"></div></div><button class="upgrade" id="whBtn">Upgrade · $80</button></div></div><div class="sectionhead"><h2>📈 Next milestone</h2></div><div class="info"><div class="progress"><div class="progress-top"><span id="milestoneLabel">Earn $1,000 total</span><span id="milestoneValue">0%</span></div><div class="progress-track"><div class="progress-fill" id="milestoneFill"></div></div></div></div></section>
 <section id="teamTab" class="tab"><div class="sectionhead"><h2>👷 Mine managers</h2><span class="chip">PERMANENT</span></div><div class="panel"><h3>Hire a manager for each shaft</h3><p class="notice" style="margin-top:0">Managers work automatically and triple the production of their shaft. They remain hired until you reset the mine.</p><div id="managerList"></div></div><div class="panel"><h3>⛏️ Hand tools</h3><div class="manager" style="border:0"><div><div class="name" id="tapLevel">Pickaxe Lv 1</div><div class="desc" id="tapPower">5 ore per tap</div></div><button id="tapUpgrade">Upgrade</button></div></div></section>
 <section id="empireTab" class="tab"><div class="sectionhead"><h2>🏆 Your empire</h2></div><div class="panel"><h3>Mine statistics</h3><div id="stats" style="font-size:13px;line-height:2.1;color:#d4e0ef"></div><div class="prestige"><b>✨ Rebirth — a richer mine</b><p>When you have earned $100,000 in this mine, you can start again with a permanent +50% ore value bonus. Cash, shafts, upgrades and managers reset.</p><div style="font-size:13px;margin:6px 0 10px" id="prestigeInfo">Not unlocked</div><button id="prestigeBtn" disabled>Rebirth at $100K</button></div></div><div class="panel"><h3>📱 Your saved game</h3><p class="notice" style="margin:0">Game progress is saved on this device only. It also earns money while you are away, for up to 8 hours. Don't clear this website's storage if you want to keep your mine.</p><button class="round" id="saveBtn" style="margin-top:12px">💾 Save now</button></div></section>
 <div class="footerline">Single-player • No ads • No accounts • Saves on your device</div>
@@ -40,7 +48,7 @@
 </div><div class="toast" id="toast" role="status" aria-live="polite"></div><div class="overlay" id="overlay"><div class="modal"><div style="font-size:38px" id="modalEmoji">💰</div><h2 id="modalTitle">Welcome back!</h2><p id="modalText"></p><button id="modalClose">Let's dig!</button></div></div>
 <script>
 (()=>{'use strict';
-const SAVE='deepdig_idle_v1';const SHAFTS=[{name:'Coal seam',base:1.8,cost:0,color:'🪨'},{name:'Copper vein',base:5,cost:450,color:'🟠'},{name:'Iron deposit',base:14,cost:4000,color:'⚙️'},{name:'Silver mine',base:36,cost:25000,color:'🥈'},{name:'Gold mine',base:90,cost:130000,color:'🥇'},{name:'Emerald cavern',base:240,cost:650000,color:'💚'},{name:'Ruby chamber',base:600,cost:3000000,color:'❤️'},{name:'Diamond depths',base:1500,cost:15000000,color:'💎'}];
+window.deepDigVersion='3.0';const SAVE='deepdig_idle_v1';const SHAFTS=[{name:'Coal seam',base:1.8,cost:0,color:'🪨'},{name:'Copper vein',base:5,cost:450,color:'🟠'},{name:'Iron deposit',base:14,cost:4000,color:'⚙️'},{name:'Silver mine',base:36,cost:25000,color:'🥈'},{name:'Gold mine',base:90,cost:130000,color:'🥇'},{name:'Emerald cavern',base:240,cost:650000,color:'💚'},{name:'Ruby chamber',base:600,cost:3000000,color:'❤️'},{name:'Diamond depths',base:1500,cost:15000000,color:'💎'}];
 const $=id=>document.getElementById(id);const fmt=n=>{if(!Number.isFinite(n))return '0';const a=Math.abs(n);for(const [d,s] of [[1e15,'Qa'],[1e12,'T'],[1e9,'B'],[1e6,'M'],[1e3,'K']])if(a>=d)return (n/d).toFixed(a/d>=100?0:a/d>=10?1:2).replace(/\.0+$/,'')+s;return n>=100?Math.floor(n).toLocaleString('en-GB'):n>=10?n.toFixed(1).replace(/\.0$/,''):n.toFixed(1).replace(/\.0$/,'')};
 const cash=n=>'$'+fmt(n);const initial=()=>({cash:120,ore:0,stock:0,earned:0,allTime:0,taps:0,tapLevel:1,elev:1,wh:1,prestige:0,shafts:SHAFTS.map((x,i)=>({level:i===0?1:0,manager:false})),last:Date.now()});
 let s=initial(),buy='1',active='mine',lastRender=0,saveTimer=0,toastTimer=0;
@@ -89,6 +97,124 @@ $('shafts').addEventListener('click',e=>{let b=e.target.closest('[data-shaft]');
 $('digBtn').addEventListener('click',()=>{s.ore+=tapYield();s.taps++;render();if(s.taps%10===0)save()});$('elevBtn').addEventListener('click',()=>spendUpgrade('elev',0));$('whBtn').addEventListener('click',()=>spendUpgrade('wh',0));$('tapUpgrade').addEventListener('click',()=>spendUpgrade('tap',0));$('managerList').addEventListener('click',e=>{let b=e.target.closest('[data-manager]');if(!b)return;let i=Number(b.dataset.manager),v=managerCost(i);if(s.cash<v||s.shafts[i].manager)return;s.cash-=v;s.shafts[i].manager=true;notify('Manager hired — 3× production!');render();save()});$('buySelector').addEventListener('click',e=>{let b=e.target.closest('[data-buy]');if(!b)return;buy=b.dataset.buy;document.querySelectorAll('[data-buy]').forEach(b=>b.classList.toggle('active',b.dataset.buy===buy));render()});
 document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{active=b.dataset.tab;document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.id===active+'Tab'));document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===active));render();window.scrollTo({top:0,behavior:'instant'})}));$('prestigeBtn').addEventListener('click',()=>{if(s.earned<100000)return;if(!confirm('Rebirth now? This resets your mine, cash, upgrades and managers for a permanent +50% ore value bonus.'))return;let all=s.allTime,prestige=s.prestige+1;s=initial();s.prestige=prestige;s.allTime=all;notify('Rebirth complete! Ore is worth more.');save();render()});$('saveBtn').addEventListener('click',()=>{save();notify('Game saved on this device')});$('settingsBtn').addEventListener('click',()=>modal('How to play','Miners extract ore automatically. The elevator moves it up, and the warehouse sells it. Upgrade all three to grow your profits. Tap to dig extra ore, unlock deeper shafts and hire managers. Your progress saves on this device.','⛏️'));$('modalClose').addEventListener('click',()=>$('overlay').classList.remove('show'));
 let previous=performance.now();function tick(now){if(active==='mine')animateLift(now);let dt=Math.min((now-previous)/1000,1);previous=now;simulate(dt);if(now-lastRender>350){render();lastRender=now}if(now-saveTimer>5000){save();saveTimer=now}requestAnimationFrame(tick)}requestAnimationFrame(tick);document.addEventListener('visibilitychange',()=>{if(document.hidden){save()}else{let diff=Math.min(28800,(Date.now()-s.last)/1000);if(diff>10)simulate(diff*.45);previous=performance.now();render()}});window.addEventListener('pagehide',save);
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});render();
+window.__mineState=()=>s;if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});render();
 })();
-</script></body></html>
+</script>
+<script>
+/* Canvas animation intentionally stays outside the game UI rerender loop. */
+(()=>{'use strict';
+const canvas=document.getElementById('liveMine');if(!canvas)return;
+const ctx=canvas.getContext('2d',{alpha:false});if(!ctx)return;
+const W=540,H=392;let prev=0,frames=0;
+const earth=['#5c4535','#57402f','#624632'];
+function box(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(x,y,w,h)}
+function line(x,y,xx,yy,col,width=2){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(xx,yy);ctx.strokeStyle=col;ctx.lineWidth=width;ctx.stroke()}
+function oval(x,y,rx,ry,col){ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=col;ctx.fill()}
+function text(t,x,y,size=12,col='#fff',weight=800){ctx.fillStyle=col;ctx.font=`${weight} ${size}px system-ui,sans-serif`;ctx.fillText(t,x,y)}
+function worker(x,y,t,scale=1,walking=true,vest='#f6a23e',flip=1){
+ ctx.save();ctx.translate(x,y);ctx.scale(flip*scale,scale);
+ const step=walking?Math.sin(t*8):Math.sin(t*4)*.12;
+ // long, clearly separated animated legs
+ line(-4,-1,-5+step*4,12,'#263c4e',6);line(5,-1,5-step*4,12,'#263c4e',6);
+ line(-5+step*4,12,-7+step*4,13,'#121d25',5);line(5-step*4,12,8-step*4,13,'#121d25',5);
+ box(-9,-24,19,23,vest);box(-2,-23,5,20,'#ffdb6c');
+ line(-8,-20,-13+step*3,-9,'#e7b086',5);line(9,-20,14-step*3,-9,'#e7b086',5);
+ oval(0,-31,9,10,'#eab58e');box(-11,-41,22,8,'#fbd05a');box(-12,-35,24,4,'#c58f27');
+ box(-5,-33,3,3,'#51372d');box(5,-33,3,3,'#51372d');
+ ctx.restore();
+}
+function miner(x,y,t,flip=1){
+ worker(x,y+Math.sin(t*4)*1.2,t,1.05,false,'#ef983d',flip);
+ ctx.save();ctx.translate(x,y);ctx.scale(flip,1);
+ const swing=Math.sin(t*5)*.9;
+ ctx.translate(11,-20);ctx.rotate(swing);
+ line(0,0,22,-19,'#d7b280',5);line(13,-23,30,-12,'#becbd3',5);
+ ctx.restore();
+ for(let j=0;j<3;j++){let phase=(t*3.3+j*.31)%1;
+  if(phase<.48){oval(x+flip*(31+phase*20),y-13-phase*15,2.2,2.2,'#ffca43')}
+ }
+}
+function cart(x,y,t,loaded=true){
+ ctx.save();ctx.translate(x,y);
+ if(loaded){for(let k=0;k<4;k++)oval(-14+k*9,-17-((k%2)*4),6,5,['#d8af51','#f6cc70','#a5a8b3'][k%3])}
+ box(-21,-16,43,17,'#627b90');box(-24,-17,47,5,'#a2b8bd');
+ for(let xx of [-13,14]){oval(xx,6,6,6,'#18202a');oval(xx,6,2,2,'#bbcad2')}
+ ctx.restore();
+}
+function truck(x,y,t){
+ ctx.save();ctx.translate(x,y);
+ // long dump truck carrying visible ore
+ box(-49,-25,66,25,'#db993b');box(-48,-24,63,5,'#ffce70');
+ for(let k=0;k<6;k++)oval(-40+k*10,-28-(k%2)*2,8,5,'#d7b66c');
+ box(17,-27,30,27,'#e9a52d');box(22,-23,20,13,'#8bc7e3');
+ box(46,-9,8,9,'#dd762e');
+ for(let xx of [-29,30]){oval(xx,3,9,9,'#1f2a30');oval(xx,3,4,4,'#bac4c9');line(xx,1,xx+Math.cos(t*9)*3,4+Math.sin(t*9)*3,'#eaf5fa',1.5)}
+ ctx.restore();
+}
+function draw(now){
+ const t=now/1000; const st=window.__mineState?.();const opened=Math.max(1,st?.shafts?.filter(z=>z.level>0).length||1);
+ // sky, clouds, background hills
+ let sky=ctx.createLinearGradient(0,0,0,120);sky.addColorStop(0,'#6eb0e0');sky.addColorStop(1,'#bfd8b7');box(0,0,W,116,sky);
+ oval(460,31,18,18,'#fff1a6');oval(460,31,26,26,'#fff0a633');
+ for(let k=0;k<3;k++){let cx=((k*185+t*8)%(W+120))-60;oval(cx,28+k*12,35,11,'#ffffffd9');oval(cx+19,21+k*12,23,12,'#ffffffd9')}
+ ctx.beginPath();ctx.moveTo(0,90);ctx.lineTo(90,52);ctx.lineTo(158,93);ctx.lineTo(263,57);ctx.lineTo(352,99);ctx.lineTo(460,62);ctx.lineTo(540,94);ctx.lineTo(540,116);ctx.lineTo(0,116);ctx.fillStyle='#80a38f';ctx.fill();
+ box(0,91,W,25,'#6e9d51');
+ // warehouse / hopper
+ box(405,49,98,42,'#d4a25d');box(398,42,111,12,'#815440');
+ box(422,62,23,29,'#445467');box(459,58,27,14,'#6b8492');text('DEPOT',414,38,12,'#293b4f');
+ // surface walking human workers
+ worker(42+((t*25)%190),83,t,1.12,true,'#f9a943',1);
+ worker(360-((t*17)%130),83,t+1,1.03,true,'#f3bf42',-1);
+ // road truck continuously visible and travelling, oscillates across the road
+ box(0,107,W,26,'#525d64');box(0,108,W,3,'#b3b8b5');
+ for(let x=0;x<W;x+=55)box(x,121,32,3,'#e1cca3');
+ let truckX=100+((Math.sin(t*.51)+1)*.5)*320;
+ truck(truckX,107,t);
+ // earthy underground background and geological seams
+ for(let i=0;i<3;i++)box(0,133+i*86,W,86,earth[i]);
+ for(let i=0;i<13;i++){let x=(i*73+25)%540,y=147+(i*59)%238;oval(x,y,16,5,i%3===0?'#79533a':'#4b3b31')}
+ // vertical mining shaft housing and operating lift
+ box(255,131,64,260,'#182630');box(259,131,4,260,'#b1ab80');box(313,131,4,260,'#b1ab80');
+ for(let y=138;y<392;y+=15)line(259,y,315,y,'#596777',1);
+ // tunnels and walking people/carts
+ for(let i=0;i<3;i++){
+  const top=140+i*84;const isOpen=i<opened;
+  for(let side=0;side<2;side++){
+   const left=side===0?8:326,width=side===0?241:206;
+   box(left,top,width,61,isOpen?'#253039':'#2b2b2e');
+   box(left,top,width,5,isOpen?'#c29353':'#6b5446');
+   box(left,top+55,width,6,'#ab7850');
+   for(let bx=left+20;bx<left+width;bx+=66){box(bx,top+6,5,49,'#8b6946');box(bx-6,top+6,17,4,'#bc955e')}
+   box(left,top+48,width,2,'#7a8d94');box(left,top+54,width,2,'#73848a');
+  }
+  if(!isOpen){text('🔒 SHAFT '+(i+1)+' — LOCKED',25,top+31,13,'#c2b29e');continue;}
+  text('SHAFT '+(i+1),12,top+17,11,'#ffde9b');
+  const yy=top+43;
+  miner(65,yy,t+i,1); miner(462,yy,t+1.1*i,-1);
+  // hauling cart has long travel distance and changes direction on return
+  const travel=(Math.sin(t*1.25+i*1.7)+1)/2;
+  cart(105+travel*126,top+43,t,travel<.87);
+  cart(373+((Math.sin(t*1.1+i*2)+1)/2)*100,top+43,t);
+  // employee clearly walking along the tunnels
+  worker(135+((Math.sin(t*.9+i)+1)/2)*60,top+41,t+i,0.82,true,'#f1a54a',1);
+ }
+ // elevator travels all the way up and down in a brightly outlined cage
+ const liftPhase=(Math.sin(t*1.18-Math.PI/2)+1)/2;
+ const ly=149+liftPhase*189;
+ line(288,133,288,ly,'#e6dfca',2);
+ box(265,ly,44,40,'#ffce62');box(270,ly+5,34,30,'#536778');
+ box(270,ly+7,34,4,'#e6bd69');box(270,ly+29,34,4,'#e6bd69');
+ oval(286,ly+16,8,7,'#ecc36b');text('LIFT',267,ly-5,10,'#fff4c5');
+ // operational status light and indication
+ oval(521,148,6,6,Math.sin(t*5)>0?'#9dffac':'#47835d');
+ text('ORE  →  LIFT  →  DEPOT',15,381,12,'#f3e3bd');
+ frames++;
+}
+function resize(){const dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}
+resize();window.addEventListener('resize',resize,{passive:true});
+function tick(now){requestAnimationFrame(tick);if(now-prev<30)return;prev=now;if(canvas.getBoundingClientRect().width&&document.visibilityState==='visible')draw(now)}
+requestAnimationFrame(tick);
+window.__liveMineFrames=()=>frames;
+})();
+</script>
+</body></html>
